@@ -1,0 +1,17 @@
+<peopleList>
+  <!--1 or more repetitions:-->
+  <person>
+    <ID>string</ID>
+    <First_name>string</First_name>
+    <Family_name>string</Family_name>
+    <Father>string</Father>
+    <Mother>string</Mother>
+    <Parents>string</Parents>
+    <Daughters>string</Daughters>
+    <Sons>string</Sons>
+    <Children>string</Children>
+    <Brothers>string</Brothers>
+    <Sisters>string</Sisters>
+    <Siblings>string</Siblings>
+  </person>
+</peopleList>

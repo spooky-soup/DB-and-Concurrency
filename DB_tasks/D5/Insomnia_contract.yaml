@@ -1,0 +1,378 @@
+_type: export
+__export_format: 4
+__export_date: 2023-06-13T18:38:35.249Z
+__export_source: insomnia.desktop.app:v2023.2.2
+resources:
+  - _id: req_201250a49aa84289aa4f91cd3a05aeaf
+    parentId: wrk_2f13283a04a643c1b89591aa7d1c720f
+    modified: 1686591121269
+    created: 1686590609380
+    url: http://127.0.0.1:5000/airports
+    name: New Request
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1686590609380
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: wrk_2f13283a04a643c1b89591aa7d1c720f
+    parentId: null
+    modified: 1686590609367
+    created: 1686590609367
+    name: New Document
+    description: ""
+    scope: design
+    _type: workspace
+  - _id: env_24954de9cff91b1ae00c36f0f272b572f25c5505
+    parentId: wrk_2f13283a04a643c1b89591aa7d1c720f
+    modified: 1686590609373
+    created: 1686590609373
+    name: Base Environment
+    data: {}
+    dataPropertyOrder: null
+    color: null
+    isPrivate: false
+    metaSortKey: 1686590609373
+    _type: environment
+  - _id: jar_24954de9cff91b1ae00c36f0f272b572f25c5505
+    parentId: wrk_2f13283a04a643c1b89591aa7d1c720f
+    modified: 1686590609375
+    created: 1686590609375
+    name: Default Jar
+    cookies: []
+    _type: cookie_jar
+  - _id: spc_9246609eaedd4fca8166cf032ce056e6
+    parentId: wrk_2f13283a04a643c1b89591aa7d1c720f
+    modified: 1686681245322
+    created: 1686591961158
+    fileName: New Document
+    contents: >+
+      openapi: 3.0.0
+
+      info:
+        version: 1.0.0
+        title: Flights booking
+        description: RESTful service contract for working with demo bookings database
+        contact:
+
+      tags:
+        - name: "Cities"
+        - name: "Airports"
+        - name: "Flights"
+        - name: "Bookings"
+
+      servers:
+        - url: http://127.0.0.1:5000
+          description: dev server
+
+          
+      components:
+        schemas:
+          Route:
+            type: object
+            properties:
+              flightNo:
+                type: string
+                example: PG0405
+              departureTime:
+                type: string
+                format: date-time
+                example: "2017-07-16 13:35:00+07"
+              arrivalTime:
+                type: string
+                format: date-time
+                example: "2017-07-16 14:30:00+07"
+              origin:
+                type: string
+                example: "DME"
+              destination:
+                type: string   
+                example: "LED"
+          HttpErr:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+            required:
+              - code
+              - message
+        responses:
+          BadRequest:
+            description: 400 Bad Request response
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/HttpErr"
+      paths:
+        /cities:
+          get:
+            summary: Get all available cities
+            description: Get all available cities
+            operationId: getCities
+            tags:
+              - Cities
+            responses:
+              '200':
+                description: OK
+                content:
+                  #application/json:
+                  array:
+                    schema:
+                      type: object
+                      properties:
+                        cities:
+                          type: array
+                          items:
+                            type: string
+                            
+        /airports:
+          get:
+            summary: Get all available airports
+            description: Get all available airports or specify a city
+            operationId: getAirports
+            tags:
+              - Airports
+            parameters:
+              - name: city
+                in: query
+                description: Name of the city within which the airports are desired
+                schema:
+                  type: string
+                required: false
+            responses:
+              '200':
+                description: OK
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        airports:
+                          type: array
+                          items:
+                            type: string
+                 
+        /inbound-schedule/{airport}:
+          get:
+            summary: Get all available airports
+            description: Get all available airports or specify a city
+            operationId: getInboundSchedule
+            tags:
+              - Flights
+            parameters:
+              - in: path
+                name: airport
+                #in: query 
+                description: Desired airport code
+                schema: 
+                  type: string
+                  example: OVB
+                required: true
+            responses:
+              '200':
+                description: OK
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        weekDay:
+                          type: string
+                        arrivalTime:
+                          type: string
+                        flightNo:
+                          type: string
+                        origin:
+                          type: string
+                          
+        /outbound-schedule/{airport}:
+          get:
+            summary: Get all available airports
+            description: Get all available airports or specify a city
+            operationId: getOutboundSchedule
+            tags:
+              - Flights
+            parameters:
+              - in: path
+                name: airport
+                description: Desired airport code
+                schema: 
+                  type: string
+                  example: OVB
+                required: true
+            responses:
+              '200':
+                description: OK
+                content:
+                  application/json:
+                  #array:
+                    schema:
+                      type: object
+                      properties:
+                        weekDay:
+                          type: string
+                        departureTime:
+                          type: string
+                          format: date-time
+                          example: "2017-07-16 13:35:00+07"
+                        flightNo:
+                          type: string
+                          example: "PG0405"
+                        origin:
+                          type: string
+                          example: "DME"     
+         
+        /flights-between:
+          get:
+            summary: List the routes connecting two points (either airports or cities)
+            description: Get all available airports or specify a city
+            operationId: getRoutes
+            tags:
+              - Flights
+            parameters:
+              - name: departurePoint
+                in: query 
+                description: Desired departure city or airport name
+                schema: 
+                  type: string
+                  example: OVB
+                required: true
+              - name: arrivalPoint
+                in: query 
+                description: Desired arrival city or airport name
+                schema: 
+                  type: string
+                  example: VKO
+                required: true
+              - name: departureDate
+                in: query 
+                description: Departure date in YYYY-MM-DD format
+                schema: 
+                  type: string
+                  format: date
+                  example: 2017-08-07
+                required: true
+              - name: bookingClass
+                in: query 
+                description: Booking class (either Economy, Comfort or Business)
+                schema: 
+                  type: string
+                  enum: [Economy, Comfort, Business]
+                  example: Comfort
+                required: false
+              - name: connectionsNumber
+                in: query 
+                description: Limits number of connections - 0 (direct), 1, 2...
+                schema: 
+                  type: integer
+                  example: 0
+                required: false
+            responses:
+              '200':
+                description: OK
+                content:
+                  application/json:
+                    schema:
+                      type: array
+                      items:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Route'
+                      
+        /booking:
+          post:
+            description: Create a booking for a selected route for a single passenger
+            operationId: createBooking
+            tags:
+              - Bookings
+            requestBody:
+              required: true
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      route:
+                        $ref: '#/components/schemas/Route'
+                      passenger:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: VALERIY TIKHONOV
+                          id:
+                            type: string
+                            example: "8149 604011"
+                          contact:
+                            type: string
+                            example: "+70127117011"
+                          
+                      
+
+            responses:
+              '201':
+                description: Created
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        bookingId:
+                          type: string
+              '400':
+                $ref: "#/components/responses/BadRequest"
+            
+        /check-in:
+          post:
+            description: Online check-in for a flight
+            operationId: checkin
+            tags:
+              - Bookings
+            requestBody:
+              required: true
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      ticket_no:
+                        type: integer
+                        example: 0005432000987
+                      flight_id:
+                        type: integer
+                        example: 28935
+                        
+            responses:
+              '201':
+                description: Created
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        bookingId:
+                          type: string
+              '400':
+                $ref: "#/components/responses/BadRequest"
+                    
+                    
+        
+    contentType: yaml
+    _type: api_spec
+  - _id: uts_f4eb87eda34144f285061263c008f9ae
+    parentId: wrk_2f13283a04a643c1b89591aa7d1c720f
+    modified: 1686590609383
+    created: 1686590609383
+    name: Example Test Suite
+    _type: unit_test_suite

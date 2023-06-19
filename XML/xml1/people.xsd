@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="xmlPeopleList">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="xmlPerson" type="person-type" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:complexType name="person-type">
+        <xs:sequence>
+            <xs:element name="ID" type="xs:string"/>
+            <xs:element name="firstName" type="xs:string"/>
+            <xs:element name="familyName" type="xs:string"/>
+            <xs:element name="gender" type="xs:string" minOccurs="0"/>
+            <xs:element name="fatherID" type="xs:string" minOccurs="0"/>
+            <xs:element name="motherID" type="xs:string" minOccurs="0"/>
+            <xs:element name="spouseID" type="xs:string" minOccurs="0"/>
+            <xs:element name="daughtersIDs" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="sonsIDs" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="sistersIDs" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="brothersIDs" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
